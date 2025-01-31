@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم نیازسنجی ربات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4d7bfe;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.4s;
+            --icon-color: #6d8bf0;
+            --border-radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1a1a;
+                --text-color: #f8f9fa;
+                --card-bg: #2d2d2d;
+                --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        body {
+            font-family: 'Vazir', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #3a5dd8);
+            box-shadow: 0 4px 20px rgba(77, 123, 254, 0.15);
+            padding: 1rem 2rem;
+            margin-bottom: 1.5rem; /* اضافه شده */
+        }
+
+        .navbar .logo {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary-color);
+        }
+
+        .main-content {
+            padding: 6rem 1.5rem 8rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .rule-item {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-right: 4px solid var(--primary-color);
+            position: relative;
+        }
+
+        .rule-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .rule-item::after {
+            content: "";
+            position: absolute;
+            right: -12px;
+            top: 24px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(77, 123, 254, 0.3);
+        }
+
+        .rule-item .icon {
+            font-size: 28px;
+            color: var(--icon-color);
+            margin-left: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(77, 123, 254, 0.2));
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(77, 123, 254, 0.2);
+        }
+
+        .form-check-input {
+            width: 1.2em;
+            height: 1.2em;
+            margin-left: 0.5rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4d7bfe, #3a5dd8);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-success::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .btn-success:hover::before {
+            animation: shine 1.5s;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .command-input {
+            animation: fadeIn 0.4s ease-out;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-add-command {
+            background: rgba(77, 123, 254, 0.1);
+            color: var(--primary-color) !important;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-command:hover {
+            background: rgba(77, 123, 254, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-remove {
+            opacity: 0;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .command-input:hover .btn-remove {
+            opacity: 1;
+        }
+
+        .sticky-footer {
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            margin-top: 2rem; /* اضافه شده */
+        }
+
+        .form-check-label {
+            background: rgba(77, 123, 254, 0.08);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-check-label:hover {
+            background: rgba(77, 123, 254, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 5rem 1rem 7rem;
+            }
+            
+            .rule-item {
+                padding: 1.2rem;
+            }
+            
+            .navbar .logo {
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar fixed-top">
+        <div class="content">
+            <h4 class="mb-0">فرم نیازسنجی ربات تلگرام</h4>
+            <small class="d-block mt-1">طراحی شده توسط H0lwin</small>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <!-- بخش ۱: اطلاعات کلی پروژه -->
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:information"></iconify-icon>
+            <div>
+                <strong>نام ربات شما چیست؟</strong>
+                <input type="text" class="form-control mt-2" placeholder="نام ربات" required>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:target"></iconify-icon>
+            <div>
+                <strong>هدف اصلی ربات چیست؟ 🎯</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="goal" id="goal1" value="sales" required>
+                    <label class="form-check-label" for="goal1">فروش محصولات/خدمات 🛍</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="goal" id="goal2" value="education">
+                    <label class="form-check-label" for="goal2">آموزش یا مشاوره 🎓</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="goal" id="goal3" value="management">
+                    <label class="form-check-label" for="goal3">مدیریت گروه/کانال 👥</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="goal" id="goal4" value="entertainment">
+                    <label class="form-check-label" for="goal4">سرگرمی (بازی، مسابقه) 🎮</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="goal" id="goal5" value="other">
+                    <label class="form-check-label" for="goal5">سایر ➕</label>
+                </div>
+                <div id="other-goal" class="conditional-field mt-2">
+                    <input type="text" class="form-control" placeholder="لطفاً توضیح دهید">
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:account-group"></iconify-icon>
+            <div>
+                <strong>مخاطبان اصلی ربات چه کسانی هستند؟ 👥</strong>
+                <label for="main-audience-age" class="mt-2 d-block">سن غالب:</label>
+                <input type="number" class="form-control" id="main-audience-age" placeholder="سن" required>
+
+                <label class="mt-2 d-block">جنسیت غالب:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender1" value="female">
+                    <label class="form-check-label" for="gender1">زن</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender2" value="male">
+                    <label class="form-check-label" for="gender2">مرد</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="gender3" value="any">
+                    <label class="form-check-label" for="gender3">مهم نیست</label>
+                </div>
+
+                <label for="language" class="mt-2 d-block">زبان:</label>
+                <select class="form-control" id="language">
+                    <option value="farsi">فارسی 🇮🇷</option>
+                    <option value="english">انگلیسی 🇺🇸</option>
+                    <option value="other">سایر 🌍</option>
+                </select>
+
+                <label for="location" class="mt-2 d-block">موقعیت جغرافیایی:</label>
+                <select class="form-control" id="location">
+                    <option value="iran">ایران 🏔</option>
+                    <option value="international">بین‌الملل 🌎</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:sword-cross"></iconify-icon>
+            <div>
+                <strong>آیا ربات‌های رقیب مشابهی دارید؟ 🥊</strong>
+                <input type="text" class="form-control mt-2" placeholder="نام ربات‌های رقیب">
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:cash"></iconify-icon>
+            <div>
+                <strong>بودجه شما چقدر است؟ 💰</strong>
+                <select class="form-control mt-2" id="budget" required>
+                    <option value="under-5m">زیر ۵ میلیون تومان</option>
+                    <option value="5-15m">۵ تا ۱۵ میلیون تومان</option>
+                    <option value="over-15m">بالای ۱۵ میلیون تومان</option>
+                    <option value="other">دیگر مبالغ ➕</option>
+                </select>
+                <div id="other-budget" class="conditional-field mt-2">
+                    <input type="text" class="form-control" placeholder="لطفاً مبلغ مورد نظر را وارد کنید">
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:calendar"></iconify-icon>
+            <div>
+                <strong>مهلت تحویل ربات چه زمانی است؟ 📅</strong>
+                <label for="beta-date" class="mt-2 d-block">نسخه آزمایشی:</label>
+                <input type="date" class="form-control" id="beta-date" required>
+
+                <label for="final-date" class="mt-2 d-block">نسخه نهایی:</label>
+                <input type="date" class="form-control" id="final-date" required>
+            </div>
+        </div>
+
+        <!-- بخش ۲: ساختار و عملکرد ربات -->
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:robot"></iconify-icon>
+            <div>
+                <strong>نوع ربات شما چیست؟</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="bot-type" id="bot-type1" value="public">
+                    <label class="form-check-label" for="bot-type1">عمومی 🌍</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bot-type" id="bot-type2" value="private">
+                    <label class="form-check-label" for="bot-type2">خصوصی 🔒</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:keyboard"></iconify-icon>
+            <div>
+                <strong>دستورات اصلی ربات کدامند؟ ⌨️</strong>
+                <div id="commands-container">
+                    <div class="command-input">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="/start">
+                            <button class="btn btn-remove" type="button">
+                                <iconify-icon icon="mdi:close-circle" style="color: var(--danger-color); font-size: 1.5rem;"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-add-command w-100 mt-2" type="button">
+                    <iconify-icon icon="mdi:plus-circle-outline" class="me-2"></iconify-icon>
+                    افزودن دستور جدید
+                </button>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:database"></iconify-icon>
+            <div>
+                <strong>آیا ربات نیاز به ذخیره‌سازی داده دارد؟ 💾</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="data-storage">
+                    <label class="form-check-label" for="data-storage">بله</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:package"></iconify-icon>
+            <div>
+                <strong>چه نوع محتوایی در ربات ارسال می‌شود؟ 📦</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="content-type1" value="text">
+                    <label class="form-check-label" for="content-type1">متن ساده 📝</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="content-type2" value="image">
+                    <label class="form-check-label" for="content-type2">تصویر 📸</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="content-type3" value="video">
+                    <label class="form-check-label" for="content-type3">ویدئو 🎥</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="content-type4" value="file">
+                    <label class="form-check-label" for="content-type4">فایل 📁</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="content-type5" value="button">
+                    <label class="form-check-label" for="content-type5">دکمه تعاملی 🔘</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:api"></iconify-icon>
+            <div>
+                <strong>آیا ربات باید به API خارجی متصل شود؟ 🔌</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="external-api">
+                    <label class="form-check-label" for="external-api">بله</label>
+                </div>
+                <div id="api-service" class="conditional-field mt-2">
+                    <input type="text" class="form-control" placeholder="نام سرویس">
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:credit-card"></iconify-icon>
+            <div>
+                <strong>آیا ربات نیاز به سیستم پرداخت دارد؟ 💸</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="payment-system">
+                    <label class="form-check-label" for="payment-system">بله</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش ۳: طراحی و تجربه کاربری -->
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:palette"></iconify-icon>
+            <div>
+                <strong>سبک طراحی ربات چگونه باشد؟ 🖌</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="design-style" id="design-style1" value="minimal">
+                    <label class="form-check-label" for="design-style1">مینیمال 🧊</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="design-style" id="design-style2" value="colorful">
+                    <label class="form-check-label" for="design-style2">رنگارنگ 🌈</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="design-style" id="design-style3" value="professional">
+                    <label class="form-check-label" for="design-style3">حرفه‌ای 💼</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:format-color-fill"></iconify-icon>
+            <div>
+                <strong>رنگ‌های اصلی ربات چیست؟ 🎨</strong>
+                <input type="color" class="form-control mt-2" id="primary-color">
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:image"></iconify-icon>
+            <div>
+                <strong>آیا لوگو یا آیکون خاصی دارید؟ 🖼</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="has-logo">
+                    <label class="form-check-label" for="has-logo">بله</label>
+                </div>
+                <div id="logo-upload" class="conditional-field mt-2">
+                    <input type="file" class="form-control" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:emoticon"></iconify-icon>
+            <div>
+                <strong>آیا از اموجی/استیکر خاصی استفاده شود؟ 😊</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="use-emojis">
+                    <label class="form-check-label" for="use-emojis">بله</label>
+                </div>
+                <div id="emoji-example" class="conditional-field mt-2">
+                    <input type="text" class="form-control" placeholder="مثال">
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش ۴: قابلیت‌های فنی -->
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:code-braces"></iconify-icon>
+            <div>
+                <strong>پلتفرم توسعه ربات کدام است؟</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="platform" id="platform1" value="python">
+                    <label class="form-check-label" for="platform1">Python 🐍</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="platform" id="platform2" value="nodejs">
+                    <label class="form-check-label" for="platform2">Node.js 🟩</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:shield-lock"></iconify-icon>
+            <div>
+                <strong>آیا کاربران نیاز به احراز هویت دارند؟ 🔐</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="authentication">
+                    <label class="form-check-label" for="authentication">بله</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:chart-bar"></iconify-icon>
+            <div>
+                <strong>آیا نیاز به گزارش‌گیری است؟ 📊</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="reporting">
+                    <label class="form-check-label" for="reporting">بله</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:star"></iconify-icon>
+            <div>
+                <strong>قابلیت‌های ویژه مورد نیاز: ✨</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="special-features1" value="live-chat">
+                    <label class="form-check-label" for="special-features1">چت زنده 💬</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features2" value="vip">
+                    <label class="form-check-label" for="special-features2">عضویت VIP 🌟</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features3" value="contest">
+                    <label class="form-check-label" for="special-features3">مسابقه 🎉</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features4" value="reservation">
+                    <label class="form-check-label" for="special-features4">رزرواسیون 🗓</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features5" value="analytics">
+                    <label class="form-check-label" for="special-features5">تحلیل داده‌ها 📈</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features6" value="multi-language">
+                    <label class="form-check-label" for="special-features6">پشتیبانی چندزبانه 🌐</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features7" value="notifications">
+                    <label class="form-check-label" for="special-features7">اعلان‌های خودکار 🔔</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="special-features8" value="gamification">
+                    <label class="form-check-label" for="special-features8">گیمیفیکیشن 🎮</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- بخش ۵: امنیت و پشتیبانی -->
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:shield"></iconify-icon>
+            <div>
+                <strong>میزان امنیت ربات چقدر مهم است؟</strong>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="security-level" id="security-level1" value="normal">
+                    <label class="form-check-label" for="security-level1">معمولی 🛡</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="security-level" id="security-level2" value="high">
+                    <label class="form-check-label" for="security-level2">بالا 🔒</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rule-item">
+            <iconify-icon class="icon" icon="mdi:headset"></iconify-icon>
+            <div>
+                <strong>نوع پشتیبانی پس از تحویل: 🛠</strong>
+                <select class="form-control mt-2" id="support-type">
+                    <option value="technical">فنی</option>
+                    <option value="content">محتوایی</option>
+                    <option value="none">بدون پشتیبانی ❌</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="rule-item" style="
+        margin-bottom: 3rem;
+    ">
+                <iconify-icon class="icon" icon="mdi:earth"></iconify-icon>
+                <div>
+                    <strong>آیا ربات باید مطابق قوانین GDPR باشد؟ 🌐</strong>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="gdpr-compliance">
+                        <label class="form-check-label" for="gdpr-compliance">بله</label>
+                    </div>
+                </div>
+            </div>
+
+    <!-- فوتر ثابت -->
+    <div class="sticky-footer fixed-bottom">
+        <div class="container">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="agreeCheck">
+                <label class="form-check-label" for="agreeCheck">📄 تمام موارد رو با دقت وارد کردم </label>
+            </div>
+            <button class="btn btn-success w-100" id="submitBtn" disabled>
+                <iconify-icon icon="mdi:send-check" class="me-2"></iconify-icon>
+                ارسال نهایی
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // سیستم دستورات داینامیک
+        let commandCount = 1;
+        const maxCommands = 5;
+        const commandsContainer = document.getElementById('commands-container');
+        const addButton = document.querySelector('.btn-add-command');
+
+        addButton.addEventListener('click', () => {
+            if (commandCount < maxCommands) {
+                const newCommand = document.createElement('div');
+                newCommand.className = 'command-input';
+                newCommand.innerHTML = `
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="/command${commandCount + 1}">
+                        <button class="btn btn-remove" type="button">
+                            <iconify-icon icon="mdi:close-circle" style="color: var(--danger-color); font-size: 1.5rem;"></iconify-icon>
+                        </button>
+                    </div>
+                `;
+                commandsContainer.appendChild(newCommand);
+                commandCount++;
+                
+                if (commandCount === maxCommands) {
+                    addButton.disabled = true;
+                    addButton.innerHTML = '<iconify-icon icon="mdi:alert-circle" class="me-2"></iconify-icon>حداکثر تعداد دستورات';
+                }
+            }
+        });
+
+        commandsContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-remove')) {
+                e.target.closest('.command-input').remove();
+                commandCount--;
+                addButton.disabled = false;
+                addButton.innerHTML = '<iconify-icon icon="mdi:plus-circle-outline" class="me-2"></iconify-icon>افزودن دستور جدید';
+            }
+        });
+
+        // فعال‌سازی دکمه ارسال
+        document.getElementById('agreeCheck').addEventListener('change', function() {
+            document.getElementById('submitBtn').disabled = !this.checked;
+        });
+
+        // انیمیشن ارسال فرم
+        document.getElementById('submitBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            this.innerHTML = '<div class="spinner-border spinner-border-sm me-2"></div>در حال ارسال...';
+            setTimeout(() => {
+                alert('فرم با موفقیت ارسال شد! ✅');
+                this.innerHTML = '<iconify-icon icon="mdi:send-check" class="me-2"></iconify-icon>ارسال نهایی';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
